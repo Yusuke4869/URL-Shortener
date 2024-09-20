@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@hono/zod-validator": "npm:@hono/zod-validator@^0.2.2",
     "hono": "npm:hono@^4.6.2",
     "zod": "npm:zod@^3.23.8"
   }

@@ -2,10 +2,18 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "npm:@hono/zod-validator@^0.2.2": "npm:@hono/zod-validator@0.2.2_hono@4.6.2_zod@3.23.8",
       "npm:hono@^4.6.2": "npm:hono@4.6.2",
       "npm:zod@^3.23.8": "npm:zod@3.23.8"
     },
     "npm": {
+      "@hono/zod-validator@0.2.2_hono@4.6.2_zod@3.23.8": {
+        "integrity": "sha512-dSDxaPV70Py8wuIU2QNpoVEIOSzSXZ/6/B/h4xA7eOMz7+AarKTSGV8E6QwrdcCbBLkpqfJ4Q2TmBO0eP1tCBQ==",
+        "dependencies": {
+          "hono": "hono@4.6.2",
+          "zod": "zod@3.23.8"
+        }
+      },
       "hono@4.6.2": {
         "integrity": "sha512-v+39817TgAhetmHUEli8O0uHDmxp2Up3DnhS4oUZXOl5IQ9np9tYtldd42e5zgdLVS0wsOoXQNZ6mx+BGmEvCA==",
         "dependencies": {}
@@ -19,6 +27,7 @@
   "remote": {},
   "workspace": {
     "dependencies": [
+      "npm:@hono/zod-validator@^0.2.2",
       "npm:hono@^4.6.2",
       "npm:zod@^3.23.8"
     ]
