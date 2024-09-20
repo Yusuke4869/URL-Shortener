@@ -1,4 +1,8 @@
 {
+  "tasks": {
+    "start": "deno run --env --unstable-kv --allow-net --allow-env src/main.ts",
+    "dev": "deno run --watch --env --unstable-kv --allow-net --allow-env src/main.ts"
+  },
   "imports": {
     "@hono/zod-validator": "npm:@hono/zod-validator@^0.2.2",
     "hono": "npm:hono@^4.6.2",
