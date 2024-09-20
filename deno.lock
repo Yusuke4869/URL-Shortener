@@ -2,11 +2,16 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "npm:hono@^4.6.2": "npm:hono@4.6.2"
+      "npm:hono@^4.6.2": "npm:hono@4.6.2",
+      "npm:zod@^3.23.8": "npm:zod@3.23.8"
     },
     "npm": {
       "hono@4.6.2": {
         "integrity": "sha512-v+39817TgAhetmHUEli8O0uHDmxp2Up3DnhS4oUZXOl5IQ9np9tYtldd42e5zgdLVS0wsOoXQNZ6mx+BGmEvCA==",
+        "dependencies": {}
+      },
+      "zod@3.23.8": {
+        "integrity": "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==",
         "dependencies": {}
       }
     }
@@ -14,7 +19,8 @@
   "remote": {},
   "workspace": {
     "dependencies": [
-      "npm:hono@^4.6.2"
+      "npm:hono@^4.6.2",
+      "npm:zod@^3.23.8"
     ]
   }
 }
