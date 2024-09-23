@@ -34,9 +34,9 @@ api.use(async (c, next) => {
 });
 
 api.get("/all", getAllItemsController);
-api.get("/item/:param", getItemController);
+api.get("/items/:param", getItemController);
 api.put(
-  "/item/:param",
+  "/items/:param",
   zValidator(
     "json",
     z.object({
@@ -51,7 +51,7 @@ api.put(
   },
 );
 api.patch(
-  "/item/:param",
+  "/items/:param",
   zValidator(
     "json",
     z.object({
@@ -66,6 +66,6 @@ api.patch(
     return patchItemController(c, description, url, count, unavailable);
   },
 );
-api.delete("/item/:param", deleteItemController);
+api.delete("/items/:param", deleteItemController);
 
 export default api;
