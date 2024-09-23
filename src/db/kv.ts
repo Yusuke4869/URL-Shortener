@@ -18,7 +18,7 @@ class KV {
 
   static async getInstance(): Promise<KV> {
     if (this.instance === null) {
-      const KV_PATH = Deno.env.get("KV_PATH");
+      const KV_PATH = Deno.env.get("KV_PATH") || undefined;
       const kv = await Deno.openKv(KV_PATH);
       this.instance = new KV(kv);
     }

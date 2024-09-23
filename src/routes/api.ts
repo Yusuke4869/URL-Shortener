@@ -12,7 +12,7 @@ import {
 } from "../controllers/api.ts";
 import { sendAPIAccessLog } from "../services/log.ts";
 
-const apiKeys = Deno.env.get("API_KEYS")?.split(",") ?? [];
+const apiKeys = Deno.env.get("API_KEYS")?.split(",").filter(Boolean) ?? [];
 
 const api = new Hono();
 
