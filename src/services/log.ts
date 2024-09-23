@@ -14,8 +14,27 @@ export const sendAccessLog = async (c: Context) => {
   if (!DISCORD_WEBHOOK_URL_ACCESS_LOG) return;
 
   const info = getConnInfo(c);
+  const time = new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Tokyo",
+    hour12: false,
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  });
+
   await sendDiscordWebhook(DISCORD_WEBHOOK_URL_ACCESS_LOG, {
-    content: `[${c.req.method}] ${info.remote.address} ${c.req.url}`,
+    content: c.req.path,
+    embeds: [
+      {
+        description: `[${c.req.method}] ${c.req.url}`,
+        color: 0x008000,
+        footer: {
+          text: `${time} - ${info.remote.address}`,
+        },
+      },
+    ],
   });
 };
 
@@ -53,7 +72,7 @@ export const sendAPIAccessLog = async (
       {
         title,
         description: `[${c.req.method}] ${c.req.url}`,
-        color: error ? 0xff0000 : 0x20c030,
+        color: error ? 0xff0000 : 0x008000,
         fields: [{
           name: "Hashed API Key",
           value: hashedApiKey,
