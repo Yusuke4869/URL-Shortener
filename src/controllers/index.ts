@@ -11,6 +11,9 @@ export const redirect = async (c: Context) => {
   const { host, param } = getRequest(c);
   if (!host || !param) return c.notFound();
 
+  const query = c.req.query();
+  if (Object.keys(query).length > 0) return c.notFound();
+
   const url = await getURL(host, param);
   if (!url) return c.notFound();
 
