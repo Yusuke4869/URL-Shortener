@@ -9,9 +9,15 @@ const DISCORD_WEBHOOK_URL_ACCESS_LOG = Deno.env.get(
 const DISCORD_WEBHOOK_URL_API_ACCESS_LOG = Deno.env.get(
   "DISCORD_WEBHOOK_URL_API_ACCESS_LOG",
 );
+const DISCORD_WEBHOOK_URL_OTHERS_LOG = Deno.env.get(
+  "DISCORD_WEBHOOK_URL_OTHERS_LOG",
+);
 
-export const sendAccessLog = async (c: Context) => {
-  if (!DISCORD_WEBHOOK_URL_ACCESS_LOG) return;
+export const sendAccessLog = async (c: Context, others: boolean) => {
+  const webhookURL = others
+    ? DISCORD_WEBHOOK_URL_OTHERS_LOG
+    : DISCORD_WEBHOOK_URL_ACCESS_LOG;
+  if (!webhookURL) return;
 
   const info = getConnInfo(c);
   const time = new Date().toLocaleString("en-US", {
@@ -24,18 +30,21 @@ export const sendAccessLog = async (c: Context) => {
     second: "numeric",
   });
 
-  await sendDiscordWebhook(DISCORD_WEBHOOK_URL_ACCESS_LOG, {
-    content: c.req.path,
-    embeds: [
-      {
-        description: `[${c.req.method}] ${c.req.url}`,
-        color: 0x008000,
-        footer: {
-          text: `${time} - ${info.remote.address}`,
+  await sendDiscordWebhook(
+    webhookURL,
+    {
+      content: c.req.path,
+      embeds: [
+        {
+          description: `[${c.req.method}] ${c.req.url} - ${c.res.status}`,
+          color: others ? 0xffff00 : 0x008000,
+          footer: {
+            text: `${time} - ${info.remote.address}`,
+          },
         },
-      },
-    ],
-  });
+      ],
+    },
+  );
 };
 
 export const sendAPIAccessLog = async (
@@ -51,9 +60,9 @@ export const sendAPIAccessLog = async (
     const encoder = new TextEncoder();
     const data = encoder.encode(apiKey);
     const hash = await crypto.subtle.digest("SHA-256", data);
-    hashedApiKey = Array.from(new Uint8Array(hash)).map((b) =>
-      b.toString(16).padStart(2, "0")
-    ).join("");
+    hashedApiKey = Array.from(new Uint8Array(hash))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 
   const info = getConnInfo(c);
@@ -73,10 +82,12 @@ export const sendAPIAccessLog = async (
         title,
         description: `[${c.req.method}] ${c.req.url}`,
         color: error ? 0xff0000 : 0x008000,
-        fields: [{
-          name: "Hashed API Key",
-          value: hashedApiKey,
-        }],
+        fields: [
+          {
+            name: "Hashed API Key",
+            value: hashedApiKey,
+          },
+        ],
         footer: {
           text: `${time} - ${info.remote.address}`,
         },

@@ -6,9 +6,16 @@ import { sendAccessLog } from "../services/log.ts";
 const app = new Hono();
 
 app.use(async (c, next) => {
-  if (!c.req.path.startsWith("/api")) await sendAccessLog(c);
-
   await next();
+
+  if (!c.req.path.startsWith("/api")) {
+    // 200-299 or 300-399
+    if (c.res.ok || (c.res.status >= 300 && c.res.status < 400)) {
+      await sendAccessLog(c, false);
+    } else {
+      await sendAccessLog(c, true);
+    }
+  }
 });
 
 app.get("/", home);
