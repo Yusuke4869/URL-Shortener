@@ -30,21 +30,26 @@ export const sendAccessLog = async (c: Context, others: boolean) => {
     second: "numeric",
   });
 
-  await sendDiscordWebhook(
-    webhookURL,
-    {
-      content: c.req.path,
-      embeds: [
-        {
-          description: `[${c.req.method}] ${c.req.url} - ${c.res.status}`,
-          color: others ? 0xffff00 : 0x008000,
-          footer: {
-            text: `${time} - ${info.remote.address}`,
+  const ua = c.req.header("user-agent") || "Unknown";
+
+  await sendDiscordWebhook(webhookURL, {
+    content: c.req.path,
+    embeds: [
+      {
+        description: `[${c.req.method}] ${c.req.url} - ${c.res.status}`,
+        color: others ? 0xffff00 : 0x008000,
+        fields: [
+          {
+            name: "User-Agent",
+            value: ua,
           },
+        ],
+        footer: {
+          text: `${time} - ${info.remote.address}`,
         },
-      ],
-    },
-  );
+      },
+    ],
+  });
 };
 
 export const sendAPIAccessLog = async (
