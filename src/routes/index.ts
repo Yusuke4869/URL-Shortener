@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { serveStatic } from "hono/deno";
 
 import { home, redirect } from "../controllers/index.ts";
 import { sendAccessLog } from "../services/log.ts";
@@ -17,6 +18,7 @@ app.use(async (c, next) => {
     }
   }
 });
+app.use("/robots.txt", serveStatic({ path: "public/robots.txt" }));
 
 app.get("/", home);
 app.get("/:param", redirect);
