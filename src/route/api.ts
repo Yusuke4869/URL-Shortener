@@ -1,7 +1,7 @@
-import { zValidator } from "@hono/zod-validator";
-import { Hono } from "hono";
-import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
+import { Hono } from "hono";
+import { zValidator } from "@hono/zod-validator";
+import { HTTPException } from "hono/http-exception";
 
 import {
   deleteItemController,
@@ -9,27 +9,28 @@ import {
   getItemController,
   patchItemController,
   putItemController,
-} from "../controllers/api.ts";
-import { sendAPIAccessLog } from "../services/log.ts";
+} from "../controller/api.ts";
+import { Logger } from "../service/logger.ts";
 
 const apiKeys = Deno.env.get("API_KEYS")?.split(",").filter(Boolean) ?? [];
 
 const api = new Hono();
+const logger = new Logger();
 
 api.use(async (c, next) => {
   const apiKey = c.req.header("X-API-Key");
 
-  if (!apiKeys.length || !apiKey) {
-    await sendAPIAccessLog(c, "Unauthorized", true, apiKey);
+  if (!apiKey) {
+    await logger.apiAccess(c, "Unauthorized", true, apiKey);
     throw new HTTPException(401, { message: "Unauthorized" });
   }
 
   if (!apiKeys.includes(apiKey)) {
-    await sendAPIAccessLog(c, "Forbidden", true, apiKey);
+    await logger.apiAccess(c, "Forbidden", true, apiKey);
     throw new HTTPException(403, { message: "Forbidden" });
   }
 
-  await sendAPIAccessLog(c, "Accessed", false, apiKey);
+  await logger.apiAccess(c, "Accessed", false, apiKey);
   await next();
 });
 
