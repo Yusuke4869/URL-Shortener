@@ -63,15 +63,20 @@ export class Logger {
     webhookUrl: string,
     content: DiscordWebhookContent,
   ): Promise<number> {
-    const res = await fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(content),
-    });
+    try {
+      const res = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(content),
+      });
 
-    return res.status;
+      return res.status;
+    } catch (e) {
+      console.error(e);
+      return 500;
+    }
   }
 
   async access(c: Context, others: boolean): Promise<void> {
