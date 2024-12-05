@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 
-import app from "./routes/index.ts";
-import api from "./routes/api.ts";
+import app from "./route/index.ts";
+import api from "./route/api.ts";
 
 const server = new Hono();
 
