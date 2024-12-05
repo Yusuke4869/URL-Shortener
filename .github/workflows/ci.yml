@@ -1,21 +1,24 @@
-name: CI
+name: ci
 on: [push, pull_request]
 
 jobs:
   ci:
-    name: CI
+    name: ci
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Deno Environment
+      - name: Set up Deno environment
         uses: denoland/setup-deno@v1
         with:
           deno-version: latest
 
-      - name: Format Check
+      - name: Check format
         run: deno fmt --check
 
-      - name: Lint Check
+      - name: Check lint
         run: deno lint
+
+      - name: Run tests
+        run: deno task test
