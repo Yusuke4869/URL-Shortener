@@ -5,8 +5,8 @@
     "test": "deno test --unstable-kv"
   },
   "imports": {
-    "@hono/zod-validator": "npm:@hono/zod-validator@^0.2.2",
-    "hono": "npm:hono@^4.6.2",
-    "zod": "npm:zod@^3.23.8"
+    "@hono/zod-validator": "npm:@hono/zod-validator@^0.7.2",
+    "hono": "npm:hono@^4.8.12",
+    "zod": "npm:zod@^4.0.14"
   }
 }
