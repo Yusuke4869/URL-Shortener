@@ -5,13 +5,13 @@ import { ItemRepository } from "../repository/item/impl.ts";
 
 import type { Context } from "hono";
 
-const itemUsecase = new ItemUseCase(new ItemRepository(await Kv.getKv()));
+const itemUseCase = new ItemUseCase(new ItemRepository(await Kv.getKv()));
 
 export const getAllItemsController = async (c: Context) => {
   const { host } = getRequest(c);
   if (!host) return c.notFound();
 
-  const items = await itemUsecase.findAllItems(host);
+  const items = await itemUseCase.findAllItems(host);
   return c.json(items);
 };
 
@@ -19,7 +19,7 @@ export const getItemController = async (c: Context) => {
   const { host, param } = getRequest(c);
   if (!host || !param) return c.notFound();
 
-  const item = await itemUsecase.findItem(host, param);
+  const item = await itemUseCase.findItem(host, param);
   if (!item) return c.notFound();
   return c.json(item);
 };
@@ -33,8 +33,8 @@ export const putItemController = async (
   const { host, param } = getRequest(c);
   if (!host || !param) return c.notFound();
 
-  const item = await itemUsecase.findItem(host, param);
-  const res = await itemUsecase.upsertItem(host, {
+  const item = await itemUseCase.findItem(host, param);
+  const res = await itemUseCase.upsertItem(host, {
     param,
     description: description ?? item?.description,
     url,
@@ -54,10 +54,10 @@ export const patchItemController = async (
   const { host, param } = getRequest(c);
   if (!host || !param) return c.notFound();
 
-  const item = await itemUsecase.findItem(host, param);
+  const item = await itemUseCase.findItem(host, param);
   if (!item) return c.notFound();
 
-  const res = await itemUsecase.updateItem(host, item, {
+  const res = await itemUseCase.updateItem(host, item, {
     description,
     url,
     count,
@@ -70,14 +70,14 @@ export const deleteItemController = async (c: Context) => {
   const { host, param } = getRequest(c);
   if (!host || !param) return c.notFound();
 
-  const item = await itemUsecase.findItem(host, param);
+  const item = await itemUseCase.findItem(host, param);
   if (!item) return c.notFound();
 
   if (c.req.query("permanently") === "true") {
-    await itemUsecase.deleteItem(host, item);
+    await itemUseCase.deleteItem(host, item);
     return c.body(null, 204);
   }
 
-  const res = await itemUsecase.disableItem(host, item);
+  const res = await itemUseCase.disableItem(host, item);
   return c.json(res);
 };

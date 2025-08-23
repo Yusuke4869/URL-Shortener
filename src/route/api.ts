@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import { HTTPException } from "hono/http-exception";
 
 import {
   deleteItemController,
@@ -10,29 +9,10 @@ import {
   patchItemController,
   putItemController,
 } from "../controller/api.ts";
-import { Logger } from "../service/logger.ts";
+import { apiMiddleware } from "../middleware/api.ts";
 
-const apiKeys = Deno.env.get("API_KEYS")?.split(",").filter(Boolean) ?? [];
-
-const logger = new Logger();
-
-const api = new Hono()
-  .use(async (c, next) => {
-    const apiKey = c.req.header("X-API-Key");
-
-    if (!apiKey) {
-      await logger.apiAccess(c, "Unauthorized", true, apiKey);
-      throw new HTTPException(401, { message: "Unauthorized" });
-    }
-
-    if (!apiKeys.includes(apiKey)) {
-      await logger.apiAccess(c, "Forbidden", true, apiKey);
-      throw new HTTPException(403, { message: "Forbidden" });
-    }
-
-    await logger.apiAccess(c, "Accessed", false, apiKey);
-    await next();
-  })
+export const apiRoute = new Hono()
+  .use(apiMiddleware)
   .get("/all", getAllItemsController)
   .get("/items/:param", getItemController)
   .put(
@@ -67,5 +47,3 @@ const api = new Hono()
     },
   )
   .delete("/items/:param", deleteItemController);
-
-export default api;
