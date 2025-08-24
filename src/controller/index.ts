@@ -1,5 +1,5 @@
 import { Kv } from "../infrastructure/kv.ts";
-import { getRequest } from "../service/request.ts";
+import { getRequest } from "../util/request.ts";
 import { ItemUseCase } from "../usecase/item/impl.ts";
 import { ItemRepository } from "../repository/item/impl.ts";
 
