@@ -1,11 +1,11 @@
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
 
-import { Logger } from "../service/logger.ts";
+import { LoggingService } from "../service/logging/impl.ts";
 
 const apiKeys = Deno.env.get("API_KEYS")?.split(",").filter(Boolean) ?? [];
 
-const logger = new Logger();
+const logger = new LoggingService();
 
 export const apiMiddleware = createMiddleware(async (c, next) => {
   const apiKey = c.req.header("X-API-Key");
