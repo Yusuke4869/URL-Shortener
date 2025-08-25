@@ -1,8 +1,8 @@
 import { createMiddleware } from "hono/factory";
 
-import { Logger } from "../service/logger.ts";
+import { LoggingService } from "../service/logging/impl.ts";
 
-const logger = new Logger();
+const logger = new LoggingService();
 
 export const indexMiddleware = createMiddleware(async (c, next) => {
   await next();
