@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Deno environment
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@v2
         with:
           deno-version: latest
 
@@ -19,6 +19,9 @@ jobs:
 
       - name: Check lint
         run: deno lint
+
+      - name: Check types
+        run: deno check
 
       - name: Run tests
         run: deno task test
