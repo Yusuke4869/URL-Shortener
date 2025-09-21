@@ -7,7 +7,6 @@
     "test": "deno test --unstable-kv"
   },
   "imports": {
-    "@hono/zod-validator": "npm:@hono/zod-validator@^0.7.2",
     "@std/assert": "jsr:@std/assert@^1.0.14",
     "hono": "npm:hono@^4.8.12",
     "zod": "npm:zod@^4.0.14"
