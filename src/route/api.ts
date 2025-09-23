@@ -26,7 +26,8 @@ const API_DOC_TOKEN =
 const createRoute = <T extends Parameters<typeof _createRoute>[0]>(
   options: T,
 ) => {
-  const { middleware: existingMiddleware } = options;
+  const { middleware: existingMiddleware, responses: existingResponses } =
+    options;
   const middlewares = existingMiddleware
     ? Array.isArray(existingMiddleware)
       ? existingMiddleware
@@ -36,6 +37,15 @@ const createRoute = <T extends Parameters<typeof _createRoute>[0]>(
   return _createRoute({
     ...options,
     middleware: [...middlewares, apiMiddleware],
+    responses: {
+      401: {
+        description: "API Key がセットされていないか不正です",
+      },
+      404: {
+        description: "指定されたホストが存在しません",
+      },
+      ...existingResponses,
+    },
   });
 };
 
@@ -77,9 +87,6 @@ apiRoute
               schema: ItemArraySchema,
             },
           },
-        },
-        404: {
-          description: "指定されたホストが存在しません",
         },
       },
     }),
@@ -134,9 +141,6 @@ apiRoute
               schema: ItemSchema,
             },
           },
-        },
-        404: {
-          description: "指定されたホストが存在しません",
         },
       },
     }),
