@@ -9,6 +9,7 @@ import {
   putItemController,
 } from "../controller/api.ts";
 import { apiMiddleware } from "../middleware/api.ts";
+import { docAuthMiddleware } from "../middleware/doc.ts";
 import {
   DeleteQuerySchema,
   DisabledItemSchema,
@@ -18,6 +19,9 @@ import {
   PathParamsSchema,
   PutRequestBodySchema,
 } from "./api.schema.ts";
+
+const API_DOC_TOKEN =
+  Deno.env.get("API_DOC_TOKENS")?.split(",").filter(Boolean)[0] ?? "";
 
 const createRoute = <T extends Parameters<typeof _createRoute>[0]>(
   options: T,
@@ -206,7 +210,7 @@ apiRoute
     }),
     deleteItemController,
   )
-  .get("/doc", (c) =>
+  .on(["GET", "OPTIONS"], "/doc", docAuthMiddleware, (c) =>
     c.json(
       apiRoute.getOpenAPI31Document({
         openapi: "3.1.0",
@@ -231,6 +235,10 @@ apiRoute
     ))
   .get(
     "/doc/ui",
-    Scalar({ url: "/api/doc", pageTitle: "URL Shortener API Reference" }),
+    docAuthMiddleware,
+    Scalar({
+      url: `/api/doc?token=${API_DOC_TOKEN}`,
+      pageTitle: "URL Shortener API Reference",
+    }),
   )
   .use(apiMiddleware); // 存在しないルートに対しても API Key の確認を行う
