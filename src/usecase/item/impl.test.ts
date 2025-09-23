@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "@std/assert";
 
 import { ItemUseCase } from "./impl.ts";
 import { Item, ItemFields } from "../../domain/item/impl.ts";
