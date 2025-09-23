@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "@std/assert";
 
 import { ItemRepository } from "./impl.ts";
 import { Item } from "../../domain/item/impl.ts";
