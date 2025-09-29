@@ -35,4 +35,8 @@ export class Item {
       unavailable: this.unavailable,
     };
   }
+
+  toJSON(): ItemFields {
+    return this.getFields();
+  }
 }
