@@ -73,10 +73,7 @@ apiRoute
   .openapi(
     createRoute({
       method: "get",
-      /**
-       * /items/{param} との競合を避けるため、 /all とする
-       */
-      path: "/all",
+      path: "/items",
       tags: ["items"],
       description: "すべてのアイテムを取得します",
       responses: {
