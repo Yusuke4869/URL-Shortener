@@ -28,6 +28,9 @@ const mockItems: Item[] = [
   }),
 ];
 
+const cloneMockItems = () =>
+  mockItems.map((item) => new Item(item.getFields()));
+
 Deno.test("findAllItems - hostに紐づく全てのitemを取得できる", async () => {
   const mockItemsJP: Item[] = [
     new Item({
@@ -48,7 +51,7 @@ Deno.test("findAllItems - hostに紐づく全てのitemを取得できる", asyn
 
   const itemUsecase = new ItemUseCase(
     new MockItemRepository({
-      mock: mockItems,
+      mock: cloneMockItems(),
       jp: mockItemsJP,
     }),
   );
@@ -62,7 +65,7 @@ Deno.test("findAllItems - hostに紐づく全てのitemを取得できる", asyn
 
 Deno.test("findItem - 指定されたitemを取得できる", async () => {
   const itemUsecase = new ItemUseCase(
-    new MockItemRepository({ mock: mockItems }),
+    new MockItemRepository({ mock: cloneMockItems() }),
   );
 
   const item = await itemUsecase.findItem("mock", "com");
@@ -72,9 +75,46 @@ Deno.test("findItem - 指定されたitemを取得できる", async () => {
   );
 });
 
+Deno.test("upsertItems - itemの配列を追加または更新できる", async () => {
+  const itemUsecase = new ItemUseCase(
+    new MockItemRepository({ mock: cloneMockItems() }),
+  );
+
+  const newItem = new Item({
+    param: "edu",
+    description: "example.edu",
+    url: "https://example.edu",
+    count: 4,
+    unavailable: false,
+  });
+  const updatedItem = new Item({
+    param: "com",
+    description: "www.example.com",
+    url: "https://www.example.com",
+    count: 10,
+    unavailable: true,
+  });
+
+  const res = await itemUsecase.upsertItems("mock", [
+    newItem.getFields(),
+    updatedItem.getFields(),
+  ]);
+  assertEquals(res, [newItem, updatedItem]);
+
+  const items = await itemUsecase.findAllItems("mock");
+  assertEquals(
+    items.find((item) => item.param === "edu"),
+    newItem,
+  );
+  assertEquals(
+    items.find((item) => item.param === "com"),
+    updatedItem,
+  );
+});
+
 Deno.test("upsertItem - itemを追加できる", async () => {
   const itemUsecase = new ItemUseCase(
-    new MockItemRepository({ mock: mockItems }),
+    new MockItemRepository({ mock: cloneMockItems() }),
   );
 
   const newItem = new Item({
@@ -91,7 +131,7 @@ Deno.test("upsertItem - itemを追加できる", async () => {
 
 Deno.test("updateItem - itemを更新できる", async () => {
   const itemUsecase = new ItemUseCase(
-    new MockItemRepository({ mock: mockItems }),
+    new MockItemRepository({ mock: cloneMockItems() }),
   );
 
   const oldItem = mockItems.find((i) => i.param === "net");
@@ -110,7 +150,7 @@ Deno.test("updateItem - itemを更新できる", async () => {
 
 Deno.test("incrementItemCount - itemのカウントをインクリメントできる", async () => {
   const itemUsecase = new ItemUseCase(
-    new MockItemRepository({ mock: mockItems }),
+    new MockItemRepository({ mock: cloneMockItems() }),
   );
 
   const oldItem = mockItems.find((i) => i.param === "org");
@@ -128,7 +168,7 @@ Deno.test("incrementItemCount - itemのカウントをインクリメントで�
 
 Deno.test("disableItem - itemを無効化できる", async () => {
   const itemUsecase = new ItemUseCase(
-    new MockItemRepository({ mock: mockItems }),
+    new MockItemRepository({ mock: cloneMockItems() }),
   );
 
   const item = mockItems.find((i) => i.param === "com");
@@ -144,7 +184,7 @@ Deno.test("disableItem - itemを無効化できる", async () => {
 
 Deno.test("deleteItem - itemを削除できる", async () => {
   const itemUsecase = new ItemUseCase(
-    new MockItemRepository({ mock: mockItems }),
+    new MockItemRepository({ mock: cloneMockItems() }),
   );
 
   const deleteItem = mockItems.find((i) => i.param === "net");

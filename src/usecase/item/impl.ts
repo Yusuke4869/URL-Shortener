@@ -17,6 +17,11 @@ export class ItemUseCase implements ItemUseCaseInterface {
     return item;
   }
 
+  async upsertItems(host: string, fields: ItemFields[]): Promise<Item[]> {
+    const res = await this.itemRepository.upsertItems(host, fields);
+    return res;
+  }
+
   async upsertItem(host: string, fields: ItemFields): Promise<Item> {
     const res = await this.itemRepository.upsertItem(host, fields);
     return res;

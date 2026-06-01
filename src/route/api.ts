@@ -7,6 +7,7 @@ import {
   getItemController,
   patchItemController,
   putItemController,
+  putItemsController,
 } from "../controller/api.ts";
 import { apiMiddleware } from "../middleware/api.ts";
 import { docAuthMiddleware } from "../middleware/doc.ts";
@@ -17,6 +18,7 @@ import {
   ItemSchema,
   PatchRequestBodySchema,
   PathParamsSchema,
+  PutItemsRequestBodySchema,
   PutRequestBodySchema,
 } from "./api.schema.ts";
 
@@ -38,6 +40,9 @@ const createRoute = <T extends Parameters<typeof _createRoute>[0]>(
     ...options,
     middleware: [...middlewares, apiMiddleware],
     responses: {
+      400: {
+        description: "リクエストボディが不正です",
+      },
       401: {
         description: "API Key がセットされていないか不正です",
       },
@@ -88,6 +93,41 @@ apiRoute
       },
     }),
     getAllItemsController,
+  )
+  .openapi(
+    createRoute({
+      method: "put",
+      path: "/items",
+      tags: ["items"],
+      description: "param 付きのアイテム配列を作成または更新します",
+      request: {
+        body: {
+          content: {
+            "application/json": {
+              schema: PutItemsRequestBodySchema,
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "アイテム配列を作成または更新しました",
+          content: {
+            "application/json": {
+              schema: ItemArraySchema,
+            },
+          },
+        },
+        400: {
+          description:
+            "リクエストボディが不正です（アイテムは最大 1000 件かつ概算 700KiB 以内とし、param は一意である必要があります）",
+        },
+      },
+    }),
+    (c) => {
+      const items = c.req.valid("json");
+      return putItemsController(c, items);
+    },
   )
   .openapi(
     createRoute({
@@ -187,14 +227,14 @@ apiRoute
       path: "/items/{param}",
       tags: ["items"],
       description:
-        "短縮URLを無効化するか、アイテムをデータベースから削除します",
+        "短縮 URL を無効化するか、アイテムをデータベースから削除します",
       request: {
         params: PathParamsSchema,
         query: DeleteQuerySchema,
       },
       responses: {
         200: {
-          description: "短縮URLを無効化しました",
+          description: "短縮 URL を無効化しました",
           content: {
             "application/json": {
               schema: DisabledItemSchema,
@@ -226,9 +266,9 @@ apiRoute
             name: "items",
             description: `アイテム関連の操作を行います。
 
-アイテムとは、短縮URLの情報を保持するオブジェクトです。
+アイテムとは、短縮 URL の情報を保持するオブジェクトです。
 
-短縮URLが無効化されている場合、ユーザーがアクセスしても 404 が返されます
+短縮 URL が無効化されている場合、ユーザーがアクセスしても 404 が返されます
 `,
           },
         ],
