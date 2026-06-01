@@ -43,7 +43,14 @@ export class ItemRepository implements ItemRepositoryInterface {
       const res = await operation.commit();
       if (!res.ok) throw new Error("Failed to upsert items");
 
-      return fields.map((field) => new Item({ ...field }));
+      const items = await this.findAllItems(host);
+      const itemMap = new Map(items.map((item) => [item.param, item]));
+
+      return fields.map((field) => {
+        const item = itemMap.get(field.param);
+        if (!item) throw new Error("Failed to upsert items");
+        return item;
+      });
     } catch {
       throw new Error("Failed to upsert items");
     }
