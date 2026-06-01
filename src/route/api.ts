@@ -120,7 +120,7 @@ apiRoute
         },
         400: {
           description:
-            "リクエストボディが不正です（アイテムは最大1000件かつ計800KiB以内とし、paramは一意である必要があります）",
+            "リクエストボディが不正です（アイテムは最大 1000 件かつ概算 700KiB 以内とし、param は一意である必要があります）",
         },
       },
     }),
@@ -227,14 +227,14 @@ apiRoute
       path: "/items/{param}",
       tags: ["items"],
       description:
-        "短縮URLを無効化するか、アイテムをデータベースから削除します",
+        "短縮 URL を無効化するか、アイテムをデータベースから削除します",
       request: {
         params: PathParamsSchema,
         query: DeleteQuerySchema,
       },
       responses: {
         200: {
-          description: "短縮URLを無効化しました",
+          description: "短縮 URL を無効化しました",
           content: {
             "application/json": {
               schema: DisabledItemSchema,
@@ -266,9 +266,9 @@ apiRoute
             name: "items",
             description: `アイテム関連の操作を行います。
 
-アイテムとは、短縮URLの情報を保持するオブジェクトです。
+アイテムとは、短縮 URL の情報を保持するオブジェクトです。
 
-短縮URLが無効化されている場合、ユーザーがアクセスしても 404 が返されます
+短縮 URL が無効化されている場合、ユーザーがアクセスしても 404 が返されます
 `,
           },
         ],

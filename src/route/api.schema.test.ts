@@ -1,6 +1,7 @@
 import { assertEquals } from "@std/assert";
 
 import {
+  MAX_BULK_UPSERT_APPROX_BYTES,
   MAX_BULK_UPSERT_ITEMS,
   PutItemsRequestBodySchema,
 } from "./api.schema.ts";
@@ -30,6 +31,26 @@ Deno.test("PutItemsRequestBodySchema - 1001件以上は許可しない", () => {
   );
 
   assertEquals(res.success, false);
+});
+
+Deno.test("PutItemsRequestBodySchema - 概算サイズが700KiBを超えるbodyは許可しない", () => {
+  const [item] = createItems(1);
+  const res = PutItemsRequestBodySchema.safeParse([
+    {
+      ...item,
+      description: "x".repeat(MAX_BULK_UPSERT_APPROX_BYTES),
+    },
+  ]);
+
+  assertEquals(res.success, false);
+  if (!res.success) {
+    assertEquals(
+      res.error.issues.some((issue) =>
+        issue.message === "items approximate size must be <= 700KiB"
+      ),
+      true,
+    );
+  }
 });
 
 Deno.test("PutItemsRequestBodySchema - 重複したparamは許可しない", () => {
