@@ -1,5 +1,8 @@
 import { z } from "@hono/zod-openapi";
 
+// https://docs.deno.com/deploy/kv/transactions/#limits
+export const MAX_BULK_UPSERT_ITEMS = 1000;
+
 /**
  * アイテムのスキーマ
  */
@@ -44,6 +47,35 @@ export const ItemArraySchema = z.array(ItemSchema)
     description: "アイテムの配列",
   })
   .openapi("Items");
+
+/**
+ * 一括作成・更新リクエストボディのスキーマ
+ *
+ * PUT /items 用
+ */
+export const PutItemsRequestBodySchema = z.array(ItemSchema)
+  .max(MAX_BULK_UPSERT_ITEMS)
+  .superRefine((items, ctx) => {
+    const seenParams = new Set<string>();
+
+    items.forEach((item, index) => {
+      if (!seenParams.has(item.param)) {
+        seenParams.add(item.param);
+        return;
+      }
+
+      ctx.addIssue({
+        code: "custom",
+        path: [index, "param"],
+        message: "param must be unique",
+      });
+    });
+  })
+  .openapi({
+    description:
+      `一括作成・更新するアイテムの配列（最大 ${MAX_BULK_UPSERT_ITEMS} 件）`,
+  })
+  .openapi("PutItemsRequestBody");
 
 /**
  * パスパラメーターのスキーマ

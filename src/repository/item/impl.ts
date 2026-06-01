@@ -30,6 +30,25 @@ export class ItemRepository implements ItemRepositoryInterface {
     }
   }
 
+  async upsertItems(host: string, fields: ItemFields[]): Promise<Item[]> {
+    if (fields.length === 0) return [];
+
+    try {
+      let operation = this.kv.atomic();
+
+      for (const field of fields) {
+        operation = operation.set([host, field.param], { ...field });
+      }
+
+      const res = await operation.commit();
+      if (!res.ok) throw new Error("Failed to upsert items");
+
+      return fields.map((field) => new Item({ ...field }));
+    } catch {
+      throw new Error("Failed to upsert items");
+    }
+  }
+
   async upsertItem(host: string, fields: ItemFields): Promise<Item> {
     try {
       await this.kv.set([host, fields.param], { ...fields });

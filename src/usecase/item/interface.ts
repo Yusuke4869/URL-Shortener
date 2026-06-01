@@ -3,6 +3,7 @@ import type { Item, ItemFields } from "../../domain/item/impl.ts";
 export interface ItemUseCaseInterface {
   findAllItems(host: string): Promise<Item[]>;
   findItem(host: string, param: string): Promise<Item | null>;
+  upsertItems(host: string, fields: ItemFields[]): Promise<Item[]>;
   upsertItem(host: string, fields: ItemFields): Promise<Item>;
   updateItem(
     host: string,

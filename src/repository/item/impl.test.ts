@@ -193,6 +193,64 @@ Deno.test("upsertItem - itemを追加または更新できる", async (t) => {
   );
 });
 
+Deno.test("upsertItems - itemの配列を追加または更新できる", async (t) => {
+  await t.step(
+    "itemの配列をatomic operationで追加または更新できる",
+    async () => {
+      const kv = await Deno.openKv(":memory:");
+      await setItems(kv, HOST_NAME, mockItems);
+      const itemRepository = new ItemRepository(kv);
+
+      const newItem = new Item({
+        param: "jp",
+        description: "example.jp",
+        url: "https://example.jp",
+        count: 3,
+        unavailable: false,
+      });
+      const updatedItem = new Item({
+        param: "com",
+        description: "www.example.com",
+        url: "https://www.example.com",
+        count: 10,
+        unavailable: true,
+      });
+
+      const res = await itemRepository.upsertItems(HOST_NAME, [
+        newItem.getFields(),
+        updatedItem.getFields(),
+      ]);
+      assertEquals(res, [newItem, updatedItem]);
+
+      const items = await itemRepository.findAllItems(HOST_NAME);
+      assertEquals(
+        sortItems(items),
+        sortItems([
+          ...mockItems.filter((item) => item.param !== "com"),
+          newItem,
+          updatedItem,
+        ]),
+      );
+
+      kv.close();
+    },
+  );
+
+  await t.step("空の配列を渡すと何も更新しない", async () => {
+    const kv = await Deno.openKv(":memory:");
+    await setItems(kv, HOST_NAME, mockItems);
+    const itemRepository = new ItemRepository(kv);
+
+    const res = await itemRepository.upsertItems(HOST_NAME, []);
+    assertEquals(res, []);
+
+    const items = await itemRepository.findAllItems(HOST_NAME);
+    assertEquals(sortItems(items), sortItems(mockItems));
+
+    kv.close();
+  });
+});
+
 Deno.test("updateItem - itemを更新できる", async (t) => {
   await t.step(
     "itemを更新できる",

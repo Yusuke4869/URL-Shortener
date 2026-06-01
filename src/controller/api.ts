@@ -4,6 +4,7 @@ import { ItemUseCase } from "../usecase/item/impl.ts";
 import { ItemRepository } from "../repository/item/impl.ts";
 
 import type { Context } from "hono";
+import type { ItemFields } from "../domain/item/impl.ts";
 
 const itemUseCase = new ItemUseCase(new ItemRepository(await Kv.getKv()));
 
@@ -22,6 +23,17 @@ export const getItemController = async (c: Context) => {
   const item = await itemUseCase.findItem(host, param);
   if (!item) return c.notFound();
   return c.json(item);
+};
+
+export const putItemsController = async (
+  c: Context,
+  items: ItemFields[],
+) => {
+  const { host } = getRequest(c);
+  if (!host) return c.notFound();
+
+  const res = await itemUseCase.upsertItems(host, items);
+  return c.json(res);
 };
 
 export const putItemController = async (

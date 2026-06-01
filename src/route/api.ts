@@ -7,6 +7,7 @@ import {
   getItemController,
   patchItemController,
   putItemController,
+  putItemsController,
 } from "../controller/api.ts";
 import { apiMiddleware } from "../middleware/api.ts";
 import { docAuthMiddleware } from "../middleware/doc.ts";
@@ -17,6 +18,7 @@ import {
   ItemSchema,
   PatchRequestBodySchema,
   PathParamsSchema,
+  PutItemsRequestBodySchema,
   PutRequestBodySchema,
 } from "./api.schema.ts";
 
@@ -38,6 +40,9 @@ const createRoute = <T extends Parameters<typeof _createRoute>[0]>(
     ...options,
     middleware: [...middlewares, apiMiddleware],
     responses: {
+      400: {
+        description: "リクエストボディが不正です",
+      },
       401: {
         description: "API Key がセットされていないか不正です",
       },
@@ -88,6 +93,41 @@ apiRoute
       },
     }),
     getAllItemsController,
+  )
+  .openapi(
+    createRoute({
+      method: "put",
+      path: "/items",
+      tags: ["items"],
+      description: "param 付きのアイテム配列を作成または更新します",
+      request: {
+        body: {
+          content: {
+            "application/json": {
+              schema: PutItemsRequestBodySchema,
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "アイテム配列を作成または更新しました",
+          content: {
+            "application/json": {
+              schema: ItemArraySchema,
+            },
+          },
+        },
+        400: {
+          description:
+            "リクエストボディが不正です（アイテム数は最大1000件です）",
+        },
+      },
+    }),
+    (c) => {
+      const items = c.req.valid("json");
+      return putItemsController(c, items);
+    },
   )
   .openapi(
     createRoute({

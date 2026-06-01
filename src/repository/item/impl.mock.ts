@@ -15,14 +15,26 @@ export class MockItemRepository implements ItemRepositoryInterface {
   }
 
   findItem(host: string, param: string): Promise<Item | null> {
-    const item = this.items[host].find((item) => item.param === param);
+    const item = this.items[host]?.find((item) => item.param === param);
     return Promise.resolve(item ?? null);
   }
 
-  upsertItem(host: string, fields: ItemFields): Promise<Item> {
-    const item = new Item(fields);
-    this.items[host].push(item);
-    return Promise.resolve(item);
+  upsertItems(host: string, fields: ItemFields[]): Promise<Item[]> {
+    const previousItems = this.items[host] ?? [];
+    const upsertedItems = fields.map((field) => new Item(field));
+    const upsertedParams = new Set(upsertedItems.map((item) => item.param));
+
+    this.items[host] = [
+      ...previousItems.filter((item) => !upsertedParams.has(item.param)),
+      ...upsertedItems,
+    ];
+
+    return Promise.resolve(upsertedItems);
+  }
+
+  async upsertItem(host: string, fields: ItemFields): Promise<Item> {
+    const [item] = await this.upsertItems(host, [fields]);
+    return item;
   }
 
   updateItem(
