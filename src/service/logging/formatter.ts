@@ -1,6 +1,8 @@
 import { getConnInfo } from "hono/deno";
 import type { Context } from "hono";
 
+import { normalizeIpAddress } from "../../util/ip.ts";
+
 export type DiscordEmbed = {
   title?: string;
   description?: string;
@@ -46,18 +48,24 @@ export const formatAccessLog = (
 
   return {
     content: context.req.path,
-    embeds: [{
-      description:
-        `[${context.req.method}] ${context.req.url} - ${context.res.status}`,
-      color: isError ? 0xffff00 : 0x008000,
-      fields: [{
-        name: "User-Agent",
-        value: ua,
-      }],
-      footer: {
-        text: `${formatTimestamp(timestamp)} - ${info.remote.address}`,
+    embeds: [
+      {
+        description:
+          `[${context.req.method}] ${context.req.url} - ${context.res.status}`,
+        color: isError ? 0xffff00 : 0x008000,
+        fields: [
+          {
+            name: "User-Agent",
+            value: ua,
+          },
+        ],
+        footer: {
+          text: `${formatTimestamp(timestamp)} - ${
+            normalizeIpAddress(info.remote.address)
+          }`,
+        },
       },
-    }],
+    ],
   };
 };
 
@@ -72,18 +80,24 @@ export const formatApiLog = async (
   const hashedApiKey = await getHashedApiKey(apiKey);
 
   return {
-    embeds: [{
-      title,
-      description: `[${context.req.method}] ${context.req.url}`,
-      color: isError ? 0xff0000 : 0x008000,
-      fields: [{
-        name: "Hashed API Key",
-        value: hashedApiKey,
-      }],
-      footer: {
-        text: `${formatTimestamp(timestamp)} - ${info.remote.address}`,
+    embeds: [
+      {
+        title,
+        description: `[${context.req.method}] ${context.req.url}`,
+        color: isError ? 0xff0000 : 0x008000,
+        fields: [
+          {
+            name: "Hashed API Key",
+            value: hashedApiKey,
+          },
+        ],
+        footer: {
+          text: `${formatTimestamp(timestamp)} - ${
+            normalizeIpAddress(info.remote.address)
+          }`,
+        },
       },
-    }],
+    ],
   };
 };
 
