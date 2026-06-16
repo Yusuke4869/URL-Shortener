@@ -20,14 +20,11 @@ jobs:
         with:
           deno-version: latest
 
-      - name: Check format
-        run: deno fmt --check
+      - name: Install dependencies
+        run: deno ci
 
-      - name: Check lint
-        run: deno lint
-
-      - name: Check types
-        run: deno check
+      - name: Run lint check
+        run: deno task lint
 
       - name: Run tests
         run: deno task test
