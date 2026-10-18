@@ -3,9 +3,9 @@
   "specifiers": {
     "jsr:@std/assert@^1.0.14": "1.0.19",
     "jsr:@std/internal@^1.0.12": "1.0.14",
-    "npm:@hono/zod-openapi@^1.1.3": "1.6.3_hono@4.13.9_zod@4.6.5",
-    "npm:@scalar/hono-api-reference@0.12": "0.12.5_hono@4.13.9",
-    "npm:hono@^4.9.8": "4.13.9"
+    "npm:@hono/zod-openapi@^1.1.3": "1.6.3_hono@4.13.13_zod@4.6.7",
+    "npm:@scalar/hono-api-reference@0.12": "0.12.12_hono@4.13.13",
+    "npm:hono@^4.9.8": "4.13.13"
   },
   "jsr": {
     "@std/assert@1.0.19": {
@@ -19,14 +19,14 @@
     }
   },
   "npm": {
-    "@asteasolutions/zod-to-openapi@9.1.0_zod@4.6.5": {
+    "@asteasolutions/zod-to-openapi@9.1.0_zod@4.6.7": {
       "integrity": "sha512-pLMeRgRYS7/vZIgAAkOe2P6+XGTifR1MT9pqDoxZ11EmcJJ+DPmdPqLN8ZZF4U8R9KHCCQCS9c2wtuE8wSrfkw==",
       "dependencies": [
         "openapi3-ts",
         "zod"
       ]
     },
-    "@hono/zod-openapi@1.6.3_hono@4.13.9_zod@4.6.5": {
+    "@hono/zod-openapi@1.6.3_hono@4.13.13_zod@4.6.7": {
       "integrity": "sha512-VYR82Y60plu8g3pN60OUXMVKpmxh3R04Qs++3DY9vtwZ9/sA/BRY0PcRIR+Z37/3itWtM7pYwT9bKiH9JhqV6Q==",
       "dependencies": [
         "@asteasolutions/zod-to-openapi",
@@ -36,40 +36,41 @@
         "zod"
       ]
     },
-    "@hono/zod-validator@0.9.1_hono@4.13.9_zod@4.6.5": {
+    "@hono/zod-validator@0.9.1_hono@4.13.13_zod@4.6.7": {
       "integrity": "sha512-iiv6w0qrIc0arfvCtUqBWsvl4fXjzaTcQcCJTTtCnkawF9HHGE+KjEl0ox3gQJ6rKZEgE3mLExlQCF72M+mNuw==",
       "dependencies": [
         "hono",
         "zod"
       ]
     },
-    "@scalar/client-side-rendering@0.4.4": {
-      "integrity": "sha512-v07EYfjeQAkxaX74uIuasZiFL9p5Sy8XbUWprH7HVn/PIAMbjxw8rG1mwU9lqD/gQuIX8FlJUKEcveNVPBjc0w==",
+    "@scalar/client-side-rendering@0.4.11": {
+      "integrity": "sha512-2k75dLAR6Ft3Yf73sdKEjOUQzZ7nmpWgNswjnGCbPO4P0iDOKBXJXmnuNVmaOpFOZl+u4HM4lay0QuyihheTmw==",
       "dependencies": [
+        "@scalar/helpers",
         "@scalar/schemas",
         "@scalar/types",
         "@scalar/validation"
       ]
     },
-    "@scalar/helpers@0.14.0": {
-      "integrity": "sha512-FcKHBUicgIHauj3HgXsvA9KsJsj5402qspMui7N9lYaoyKBSkeUBskpAJrRDp1H+Qc1Cc4S0ATR1geVxdmCjBg=="
+    "@scalar/helpers@0.16.3": {
+      "integrity": "sha512-He0CySU4Iv4DwyVF40EoVpvPneRQ1zqC/g1eBfR2i2G9RE/BEq/F5AiUrjIkbtTPjSbIiIL1AXMkXvBvgHVdsA=="
     },
-    "@scalar/hono-api-reference@0.12.5_hono@4.13.9": {
-      "integrity": "sha512-Gb2fkbMrpW9qMKhb/+p8yFM+WkN03k/5DRh8Da5o0pa5MdpjlrHh01YagdU6R82eH1odj6wYVqUKx/iSDaJgEA==",
+    "@scalar/hono-api-reference@0.12.12_hono@4.13.13": {
+      "integrity": "sha512-JlOt8mo/tskQDnvriULUxnsYYKDQBp+t571bXFiaPw7oijfCL5bykwXpimket5Ukeg5PAkJm9O5i4JBAGcH17A==",
       "dependencies": [
         "@scalar/client-side-rendering",
         "hono"
       ]
     },
-    "@scalar/schemas@0.12.0": {
-      "integrity": "sha512-5j4NLtJQtFuJjO2OxNIV9qloJtPWaig2qfDnuREvJxxJX40JaWdImD6RIgJyz4IFLdivaPH3nqSELnkwU5s1OQ==",
+    "@scalar/schemas@0.13.2": {
+      "integrity": "sha512-T4dTbpphpDVHugS2ETd6cHOgF0FUBy58qDB6I3UviIr2HNsJQRG2RB1MX1+XQCT9md7igAzXw9lBJV12hw3NVA==",
       "dependencies": [
         "@scalar/helpers",
         "@scalar/validation"
       ]
     },
-    "@scalar/types@0.22.0": {
-      "integrity": "sha512-BQH+N+W+psHYdqsSxDzjoZV3V2gHibU3EDmXLi2wM5EPTZRfx6Vdp4tT0faaC1j+U/LESgl/C+8yjbVfBGyqBw==",
+    "@scalar/types@0.23.2": {
+      "integrity": "sha512-sya+RIpIODwcvem7SYRnPB0OdVZtQ15mSpVdPwB5qltYry7xgyp9skdc3PuxTDbyEmLuZ4ZmkSVybpaFMICZiQ==",
       "dependencies": [
         "@scalar/helpers",
         "nanoid",
@@ -77,18 +78,18 @@
         "zod"
       ]
     },
-    "@scalar/validation@0.6.5": {
-      "integrity": "sha512-t/dtbqesbOLsTusFI2kXfiFEQOiZC7+oAY+jZnE82Y64xLamo/1KrZpta8GkuAfIHyeOHOx5bDFid04eO13MIg=="
+    "@scalar/validation@0.6.7": {
+      "integrity": "sha512-xvmeYb0LOg9B598oVA/1fs9MvnMdtWjQYG3v2Wgftewizr7tQjsdDYT1TQahlDzqRG+r+ml6zlSkPrFiCE5jHQ=="
     },
-    "hono@4.13.9": {
-      "integrity": "sha512-7dMkQmZoC4E6F7AtaQSPhlWAdnBti+j7rreMZl8QB4jFiEhP9TWbGWUMi8WYzBCgmgulxuvLQupKqo+Co6Omyg=="
+    "hono@4.13.13": {
+      "integrity": "sha512-CQ46U0ZkAGmbT/4UxdzzGJpacP2IeKgY4a5/tOI9AABbpOMfK739wfDXmv1usCk+3RkKj1hQy4/fjhiwa2xlrA=="
     },
     "nanoid@5.1.16": {
       "integrity": "sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==",
       "bin": true
     },
-    "openapi3-ts@4.6.1": {
-      "integrity": "sha512-XW9MOldkhoICNeXVzzmXzmOW5G73ppOEGmh7fLCqHjgfdEYCGGN+00MlVCeUZgovjjfC56j9tvtDt1zGabNjjA==",
+    "openapi3-ts@4.6.2": {
+      "integrity": "sha512-gyyil3DweqhXiEhTqtAs9wwRLfWHmetwhI4kmM5Rn0d6gtmK863Ki7qqbQnp9+Wwlqoe3B1LFWj7kMp5ctE4rQ==",
       "dependencies": [
         "yaml"
       ]
@@ -106,8 +107,8 @@
       "integrity": "sha512-3NxN8+78OdzbT7C/WjGsyfPAtJaN3FNDsWxv7Y7mcDsT/oOmgW8BpyQQFFBnvZE3j9Y2Sdz1ULFLezL7Eb2yFw==",
       "bin": true
     },
-    "zod@4.6.5": {
-      "integrity": "sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q=="
+    "zod@4.6.7": {
+      "integrity": "sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg=="
     }
   },
   "workspace": {
